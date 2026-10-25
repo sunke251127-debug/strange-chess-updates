@@ -1,41 +1,31 @@
-# 根本就没有这样的象棋 · 手机匹配版（借助AI完成）
+# 根本就没有这样的象棋
 
-本仓库只分发 Android / 鸿蒙 4.2（兼容安卓应用）匹配版安装包和更新元数据，不包含源码、签名材料、令牌或个人路径。
+手机版更新与安装包仓库。当前版本 **1.7.3**，安装包约 **174 KB**。
 
-## 下载
+[下载最新版安装包](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/strange-chess-matching-android.apk) · [1.7.3发布说明](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.3)
 
-- **最新 APK**：<https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/strange-chess-matching-android.apk>
-- **发行页**：<https://github.com/sunke251127-debug/strange-chess-updates/releases>
-- **更新元数据**：<https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/android-update.json>
-- **SHA256 清单**：<https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/SHA256SUMS.txt>
+## 本次更新
 
-## 当前版本
+- 应用名称和游戏标题去掉“匹配版”后缀。
+- 从本地双人进入联机对战时不再自动聚焦输入框；手动点击后正常输入。
+- 联机悔棋和开启新棋局都需向对方申请，同意才执行，拒绝后原局继续。悔棋撤销最近一手；继续落子或断线会使旧申请失效。
 
-- 版本：1.7.2（versionCode 10702）
-- 包名：`cn.strangechess.mobile.matching`
-- 大小：173,927 字节
-- SHA256：`e0cd964157e26f5529ec8fda21180be3c0941d0bab7a37752623dfe36c4f8320`
-- 发布者证书 SHA256：`ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0`
-- 无 `lib/`、无 `.so`、无 Bare/JNI/native DHT 依赖
-- 随机联机优先 WebRTC，失败时走加密中继
+双方都升级到1.7.3使用新申请功能。本地双人、随机联机和好友直连保留。
 
-## 从 1.7.1 升级
+## 手机更新
 
-1.7.1 只支持自建 HTTPS 更新接口，不能直接读取 GitHub Releases。请先手动下载并覆盖安装本仓库的 1.7.2 APK 一次；包名和发布者证书保持不变，不会清除本地数据。
+**1.7.2用户**：在应用内点击“检查更新”，下载后按系统提示确认安装即可，无需卸载。
 
-安装 1.7.2 后，应用默认使用官方 GitHub 更新源：
+**1.7.1及更早版本用户**：先手动下载上面的APK并覆盖安装一次；之后使用内置GitHub更新。包名和原发布者证书不变，保留本地存档。
 
-`https://github.com/sunke251127-debug/strange-chess-updates`
+目标为安卓8.0+和兼容安卓APK的鸿蒙4.2，不适用于鸿蒙NEXT。实体手机软键盘、安装升级和跨运营商连接尚未实测。随机联机依赖公共发现服务和双方网络。
 
-后续可在应用内检查更新、后台下载，并在系统安装确认后覆盖安装。Android 不允许应用静默安装，安装确认必须由用户完成。
+## 校验
 
-## 验证与边界
+1.7.3：versionCode 10703，173,926字节。
 
-- 实际 Java `UpdateChannel` 已通过公开 latest 入口读取元数据、跟随 GitHub 获准 HTTPS 重定向、完整流式下载并校验 SHA256。
-- GitHub 更新传输测试 30 项通过；Android APK/入口套件 10/10 通过；完整 Node 回归 74/74 通过。
-- 尚未在实体安卓/鸿蒙手机安装 1.7.2，也未做两台实体手机跨运营商实测。
-- 随机联机依赖公共 WSS 发现、STUN 和加密中继；这些是外部依赖。固定服务的逻辑标识不是已部署的 DNS 域名，二叉树扩容未实现。
+SHA256：`ad147ce8bdb1887dba02a3bac762291328accf3a63efc6d1f508e60ee44a85da`
 
-## 旧内容
+[更新清单](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/android-update.json) · [校验和](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/SHA256SUMS.txt)
 
-原来的 v1.4.0 / v1.4.1 Windows 版发行及旧标签已移除。本仓库现在只面向手机匹配版；Git 提交历史保留。
+本仓库只分发安装包、更新清单和校验和。英文附件名与内部包名保留以兼容升级协议，手机显示名称不含“匹配版”。
