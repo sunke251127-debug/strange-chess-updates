@@ -1,0 +1,33 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const ROOT = path.resolve(__dirname, '..');
+const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+const info = JSON.parse(fs.readFileSync(path.join(ROOT, 'release/android-build-info.json'), 'utf8'));
+const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'release/android-update.json'), 'utf8'));
+const apk = fs.readFileSync(path.join(ROOT, 'release', info.file));
+const hash = crypto.createHash('sha256').update(apk).digest('hex');
+
+test('the reusable GitHub release manifest points at the exact signed lightweight APK and checksum list', () => {
+  assert.equal(manifest.available, true);
+  assert.equal(manifest.platform, 'android');
+  assert.equal(manifest.edition, 'matching');
+  assert.equal(manifest.packageId, info.packageId);
+  assert.equal(manifest.packageId, 'cn.strangechess.mobile.matching');
+  assert.equal(manifest.versionName, pkg.version);
+  assert.equal(manifest.versionCode, info.versionCode);
+  assert.ok(manifest.versionCode > 10701, 'the published package must be newer than 1.7.1');
+  assert.equal(manifest.bytes, apk.length);
+  assert.equal(manifest.sha256, hash);
+  assert.equal(manifest.sha256, info.sha256);
+  assert.equal(manifest.signerSha256, info.signerSha256);
+  assert.equal(manifest.signerSha256, 'ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0');
+  assert.equal(manifest.url, 'https://github.com/sunke251127-debug/strange-chess-updates/releases/download/mobile-v' + info.versionName + '/strange-chess-matching-android.apk');
+  assert.equal(info.nativeLibraries, false);
+  assert.ok(apk.length < 64 * 1024 * 1024);
+  assert.equal(info.offlineModel.simulations, 1024);
+  assert.equal(fs.readFileSync(path.join(ROOT, 'release/SHA256SUMS.txt'), 'utf8').trim(), hash + '  strange-chess-matching-android.apk');
+});

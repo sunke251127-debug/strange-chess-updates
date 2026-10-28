@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#e9dfc9">
+  <title>根本就没有这样的象棋</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="polish.css">
+  <link rel="stylesheet" href="mobile.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+</head>
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-seal" aria-hidden="true">棋</div>
+        <div class="brand-copy">
+          <div class="brand-title-row"><h1>根本就没有这样的象棋</h1></div>
+          <p>翻面之前，谁都别急着说这是谁的棋。</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="mode-switch" role="tablist" aria-label="对局模式">
+          <button id="localModeBtn" class="mode-btn active" role="tab" aria-selected="true">本地双人</button>
+          <button id="soloModeBtn" class="mode-btn" role="tab" aria-selected="false">单机对战</button>
+          <button id="onlineModeBtn" class="mode-btn" role="tab" aria-selected="false">联机对战</button>
+        </div>
+        <button id="rulesBtn" class="icon-text-btn" type="button">规则</button>
+      </div>
+    </header>
+
+    <main class="game-layout">
+      <section class="board-column" aria-label="棋盘">
+        <div id="mobileStatus" class="mobile-status" aria-live="polite"></div>
+        <div id="aiStatus" class="ai-status" role="status" hidden>
+          <span id="aiStatusText">本地模型准备中</span>
+          <progress id="aiProgress" max="1024" value="0" aria-label="模型搜索进度" hidden></progress>
+          <button id="retryAiBtn" class="soft-btn" type="button" hidden>重试</button>
+        </div>
+        <div class="board-frame">
+          <div class="board-shell">
+            <div id="board" class="board">
+              <svg class="board-art" viewBox="0 0 900 1000" aria-hidden="true" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="woodGlow" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#e7c88d"/>
+                    <stop offset=".48" stop-color="#d8b579"/>
+                    <stop offset="1" stop-color="#c9a566"/>
+                  </linearGradient>
+                  <pattern id="woodLines" width="84" height="28" patternUnits="userSpaceOnUse">
+                    <path d="M0 8 C20 4 43 13 84 7 M0 22 C26 18 55 25 84 20" fill="none" stroke="#875d33" stroke-width="1.3" opacity=".16"/>
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width="900" height="1000" fill="url(#woodGlow)"/>
+                <rect x="0" y="0" width="900" height="1000" fill="url(#woodLines)"/>
+                <rect x="15" y="15" width="870" height="970" rx="8" fill="none" stroke="#654324" stroke-width="7"/>
+                <rect x="30" y="30" width="840" height="940" rx="3" fill="none" stroke="#654324" stroke-width="2.2"/>
+                <g fill="none" stroke="#4e321b" stroke-width="3.4" stroke-linecap="square">
+                  <path d="M50 50 H850 M50 150 H850 M50 250 H850 M50 350 H850"/>
+                  <path d="M50 650 H850 M50 750 H850 M50 850 H850 M50 950 H850"/>
+                  <path d="M50 50 V950 M850 50 V950"/>
+                  <path d="M150 50 V450 M250 50 V450 M350 50 V450 M450 50 V450 M550 50 V450 M650 50 V450 M750 50 V450"/>
+                  <path d="M150 550 V950 M250 550 V950 M350 550 V950 M450 550 V950 M550 550 V950 M650 550 V950 M750 550 V950"/>
+                  <path d="M350 50 L550 250 M550 50 L350 250 M350 750 L550 950 M550 750 L350 950"/>
+                  <path d="M50 450 H850 M50 550 H850" stroke-width="2.2"/>
+                </g>
+                <g fill="#6a4824" font-family="STKaiti, KaiTi, serif" font-size="62" text-anchor="middle" opacity=".92">
+                  <text x="225" y="527">楚 河</text>
+                  <text x="675" y="527">汉 界</text>
+                </g>
+                <g fill="none" stroke="#5a3a1f" stroke-width="2.5" opacity=".72">
+                  <path d="M36 58 h14 M50 44 v14 M864 58 h-14 M850 44 v14"/>
+                  <path d="M36 942 h14 M50 956 v-14 M864 942 h-14 M850 956 v-14"/>
+                </g>
+                <g fill="#6c4827" opacity=".55">
+                  <circle cx="150" cy="250" r="4"/><circle cx="750" cy="250" r="4"/>
+                  <circle cx="150" cy="750" r="4"/><circle cx="750" cy="750" r="4"/>
+                  <circle cx="50" cy="350" r="3.4"/><circle cx="250" cy="350" r="3.4"/><circle cx="450" cy="350" r="3.4"/><circle cx="650" cy="350" r="3.4"/><circle cx="850" cy="350" r="3.4"/>
+                  <circle cx="50" cy="650" r="3.4"/><circle cx="250" cy="650" r="3.4"/><circle cx="450" cy="650" r="3.4"/><circle cx="650" cy="650" r="3.4"/><circle cx="850" cy="650" r="3.4"/>
+                </g>
+              </svg>
+              <div id="boardGrid" class="board-grid" role="grid" aria-label="九乘十中国象棋棋盘"></div>
+            </div>
+          </div>
+          <div class="board-legend" aria-hidden="true">
+            <span class="legend-item"><i class="legend-dot legal"></i>可落点</span>
+            <span class="legend-item"><i class="legend-dot selected"></i>已选</span>
+            <span class="legend-item"><i class="legend-move from">起</i>起点</span>
+            <span class="legend-item"><i class="legend-move to">终</i>落点</span>
+            <span class="legend-item"><i class="legend-move king">亮</i>亮将</span>
+            <span class="legend-item"><i class="legend-check">将</i>受攻</span>
+            <span class="legend-item"><i class="legend-bar red"></i>红位暗子</span>
+            <span class="legend-item"><i class="legend-bar black"></i>黑位暗子</span>
+          </div>
+        </div>
+      </section>
+
+      <aside id="mobilePanel" class="side-panel" aria-label="设置" tabindex="-1">
+        <div class="panel-heading"><strong id="mobilePanelTitle">设置</strong><button id="closePanelBtn" class="soft-btn" type="button">返回棋盘</button></div>
+        <section class="card status-card" hidden>
+          <div class="card-heading">
+            <span class="eyebrow">对局状态</span>
+            <span id="moveNumber" class="micro-label">第 0 手</span>
+          </div>
+          <div id="turnPill" class="turn-pill red"><span class="turn-stone"></span><span id="turnText">红方行棋</span></div>
+          <div id="modeLabel" class="mode-label">本地双人 · 同屏轮流</div>
+          <div id="checkBanner" class="check-banner" role="status" aria-live="polite" hidden>
+            <span class="check-cry">将军</span>
+            <span id="checkText">红方被将军</span>
+          </div>
+          <div id="selectionHint" class="selection-hint">点选一枚棋子，查看它这一次能怎么走。</div>
+          <div class="tool-row">
+            <button id="undoBtn" type="button" class="soft-btn">悔棋</button>
+          </div>
+        </section>
+
+        <section class="card online-card" id="onlineCard">
+          <div class="card-heading">
+            <span class="eyebrow">联机对战</span>
+            <span id="connBadge" class="conn-badge offline">未连接</span>
+          </div>
+
+          <div id="onlineSetup">
+            <button id="randomMatchBtn" type="button" class="primary-btn wide">随机联机</button>
+            <button id="cancelRandomBtn" type="button" class="soft-btn wide" hidden>取消匹配</button>
+            <p id="randomMatchHint" class="helper-text">自动寻找在线对手，无需交换邀请。</p>
+            <p id="randomMatchStatus" class="match-status" role="status" hidden></p>
+            <button id="directCreateBtn" type="button" class="primary-btn wide">邀请好友直连</button>
+            <label class="field-label" for="inviteInput">粘贴好友邀请或回复码</label>
+            <textarea id="inviteInput" class="invite-input" rows="2" maxlength="32768" spellcheck="false" placeholder="粘贴 SC-DIRECT-1 开头的完整内容"></textarea>
+            <button id="joinInviteBtn" type="button" class="soft-btn wide">加入 / 连接</button>
+            <div id="directInvitePanel" hidden>
+              <p id="directInviteHint" class="helper-text" role="status"></p>
+              <textarea id="directInviteOutput" class="invite-input" rows="2" readonly aria-label="直连邀请或回复码"></textarea>
+              <div class="tool-row"><button id="copyDirectBtn" type="button" class="soft-btn">复制直连信息</button><button id="cancelDirectBtn" type="button" class="soft-btn">取消直连</button></div>
+            </div>
+            <p class="helper-text">邀请方发邀请，好友发回回复码，邀请方粘贴后连接。优先直连，网络受限时自动尝试加密中继；双方请使用新版。</p>
+            <p id="onlineFormMessage" class="form-message" role="alert"></p>
+          </div>
+
+          <div id="roomPanel" hidden>
+            <div id="seatBadge" class="seat-badge red">你是红方</div>
+            <p id="roomStatusText" class="room-status-text">等待第二位玩家加入。</p>
+            <div id="playersLine" class="players-line"></div>
+            <div id="shareUrl" class="share-url"></div>
+            <p id="restartNotice" class="restart-notice" hidden></p>
+            <div class="room-actions">
+              <button id="onlineRestartBtn" type="button" class="soft-btn" hidden>再来一局</button>
+              <button id="leaveRoomBtn" type="button" class="danger-btn">离开房间</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card capture-card">
+          <div class="card-heading">
+            <span class="eyebrow">已吃棋</span>
+            <span class="micro-label">被吃子会亮明身份</span>
+          </div>
+          <div class="capture-row">
+            <span class="capture-label red-text">红方折损</span>
+            <div id="capturedRed" class="capture-tray"><span class="empty-tray">暂无</span></div>
+          </div>
+          <div class="capture-row">
+            <span class="capture-label dark-text">黑方折损</span>
+            <div id="capturedBlack" class="capture-tray"><span class="empty-tray">暂无</span></div>
+          </div>
+        </section>
+
+        <section id="updateCard" class="card update-card" aria-label="客户端更新" hidden>
+          <div class="card-heading"><span class="eyebrow">自动更新</span><span id="updateVersion" class="micro-label"></span></div>
+          <p id="updateMessage" class="helper-text" role="status" aria-live="polite">正在读取更新状态…</p>
+          <progress id="updateProgress" max="100" value="0" aria-label="更新下载进度" hidden></progress>
+          <div class="tool-row">
+            <button id="updateCheckBtn" type="button" class="soft-btn">检查更新</button>
+            <button id="updateRestartBtn" type="button" class="soft-btn" hidden>更新并重启</button>
+          </div>
+          <p id="updateDuringGame" class="helper-text" hidden>正在对局，退出房间后可重启更新。也可继续游玩，关闭游戏时自动更新。</p>
+        </section>
+        <section class="card mobile-settings">
+          <div class="card-heading"><span class="eyebrow">版本更新</span><span id="webVersion" class="micro-label">手机版</span></div>
+          <p id="webUpdateMessage" class="helper-text" role="status">正在准备离线棋盘…</p>
+          <button id="webUpdateCheckBtn" class="soft-btn" type="button">检查更新</button>
+        </section>
+      </aside>
+    </main>
+    <nav class="mobile-toolbar" aria-label="棋盘工具">
+      <button id="toolsBtn" type="button" class="soft-btn" aria-controls="mobilePanel" aria-expanded="false">设置</button>
+      <button id="shuffleBtn" type="button" class="soft-btn">新棋局</button>
+      <button id="quickUndoBtn" type="button" class="soft-btn">悔棋</button>
+    </nav>
+
+    <footer class="footnote">
+      <span>翻棋规则 · 暗将先亮明并计一手 · 明将才可被吃 · 将军只提示</span>
+      <span class="footnote-sep">/</span>
+      <span>好友直连需双方保持应用运行</span>
+    </footer>
+  </div>
+
+  <dialog id="soloDialog" class="modal" aria-labelledby="soloTitle">
+    <div class="modal-inner">
+      <div class="modal-heading"><span class="eyebrow">手机本地模型</span><button id="closeSoloBtn" class="round-close" type="button" aria-label="关闭">×</button></div>
+      <h2 id="soloTitle">和模型下一盘</h2>
+      <p class="helper-text">内置已完成训练的第 50 轮历史权重，每手搜索 1024 次。模型随安装包保存在手机上，断网也能下。</p>
+      <fieldset class="solo-colors"><legend>选择你的阵营</legend>
+        <label><input type="radio" name="soloColor" value="red" checked> 执红 · 先手</label>
+        <label><input type="radio" name="soloColor" value="black"> 执黑 · 后手</label>
+      </fieldset>
+      <p class="helper-text">单机对局中，同一组棋子连续将军最多 8 次，相同局面最多出现 3 次。思考时可悔棋或开始新局。</p>
+      <button id="continueSoloBtn" class="soft-btn wide" type="button" hidden>继续上次单机对局</button>
+      <button id="startSoloBtn" class="primary-btn wide" type="button">开始新局</button>
+    </div>
+  </dialog>
+
+  <dialog id="rulesDialog" class="modal">
+    <div class="modal-inner">
+      <div class="modal-heading">
+        <span class="eyebrow">本版规则</span>
+        <button id="closeRulesBtn" type="button" class="round-close" aria-label="关闭规则">×</button>
+      </div>
+      <h2>先按点位走，翻面才见真身</h2>
+      <div class="rules-grid">
+        <article>
+          <h3>棋盘与开局</h3>
+          <p>标准 9×10 棋盘，32 枚真实棋子（红黑各 16 枚，各含一枚将帅）全部混洗后放在标准初始点位，所有棋子背面朝上。红方先行。</p>
+        </article>
+        <article>
+          <h3>暗棋怎么走</h3>
+          <p>轮到哪一方，就可以操作“初始点位属于该方”的暗棋。它第一次移动时，按点位上的棋种走法行棋，落子后立即翻面，露出真实阵营与棋种。</p>
+        </article>
+        <article>
+          <h3>翻面之后</h3>
+          <p>棋子自此归真实阵营所有，也按真实棋种移动。翻出的棋子可能属于对方，甚至可能在对方回合才动得了。每走一步固定换边，不论翻出什么。</p>
+        </article>
+        <article>
+          <h3>本版的放开规则</h3>
+          <p>将帅可全盘正交一格；暗士/仕点位第一次只能在己方九宫斜走一格，翻面后按实际棋种，若翻出明士仍可全盘斜行；象可过河但受塞象眼限制；马蹩腿、炮隔一子吃。没有照面与飞将限制。</p>
+        </article>
+        <article>
+          <h3>将军提示</h3>
+          <p>明面将帅被对方按现行公开走法威胁时，会显示“将军”并标记将帅格；仍不强制应将，也不禁止送将。只有明面将帅才可能被吃，吃将即胜。</p>
+        </article>
+        <article>
+          <h3>暗将保护与胜负</h3>
+          <p>尝试吃未翻面的将/帅时，攻击棋子留在原位，将帅原地亮明，不会吃子或直接判胜。这次亮将算一手并换边；之后明面将帅可正常被吃，吃将即胜。无合法走法的一方也判负。</p>
+        </article>
+        <article>
+          <h3>联机说明</h3>
+            <p>随机联机会先在公共发现网络中寻找匹配节点；没有现成节点时由一位玩家临时承担，只把双方介绍到一起，连接确认后释放临时记录。之后棋局由双方手机直接处理，匹配节点退出不会中断已建立的对局。好友邀请仍使用加密直连或中继。公开发现节点和部分运营商网络仍可能不可达。联机悔棋撤销双方最近的一手，悔棋和开启新棋局都必须由对方同意；拒绝则保留当前棋局。继续落子或断线会使未处理的申请失效。</p>
+        </article>
+      </div>
+      <p class="rules-note">规则以当前版本为准，后续可按试玩反馈继续调整。</p>
+      <button id="rulesDoneBtn" type="button" class="primary-btn wide">知道了</button>
+    </div>
+  </dialog>
+
+  <dialog id="resultDialog" class="modal result-modal">
+    <div class="modal-inner result-inner">
+      <div id="resultMark" class="result-mark">胜</div>
+      <span class="eyebrow">本局结束</span>
+      <h2 id="resultTitle">红方胜</h2>
+      <p id="resultReason" class="result-reason"></p>
+      <div class="result-actions">
+        <button id="reviewBtn" type="button" class="soft-btn">看看棋盘</button>
+        <button id="playAgainBtn" type="button" class="primary-btn">再来一局</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="onlineRequestDialog" class="modal" aria-labelledby="onlineRequestTitle" aria-describedby="onlineRequestText">
+    <div class="modal-inner">
+      <h2 id="onlineRequestTitle">对方申请悔棋</h2>
+      <p id="onlineRequestText"></p>
+      <div class="result-actions">
+        <button id="declineOnlineRequestBtn" type="button" class="soft-btn" autofocus>拒绝</button>
+        <button id="acceptOnlineRequestBtn" type="button" class="primary-btn">同意</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="liveRegion" class="sr-only" aria-live="polite"></div>
+
+  <script src="../src/game-engine.js"></script>
+  <script src="../src/system-random.js"></script>
+  <script src="../src/room-model.js"></script>
+  <script src="../src/relay-channel.js"></script>
+  <script src="../src/peer-link.js"></script>
+  <script src="../src/random-match.js"></script>
+  <script src="../src/check-detector.js"></script>
+  <script src="../src/ai-repetition.js"></script>
+  <script src="../src/ai-rules.js"></script>
+  <script src="../src/ai-search.js"></script>
+  <script src="../src/piece-glyphs.js"></script>
+  <script src="ai-client.js"></script>
+  <script src="app.js"></script>
+  <script src="mobile.js"></script>
+</body>
+</html>

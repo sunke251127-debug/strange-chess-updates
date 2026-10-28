@@ -1,0 +1,39 @@
+{
+  "name": "strange-chess-mobile",
+  "version": "1.7.6",
+  "private": true,
+  "description": "根本就没有这样的象棋：安卓与鸿蒙手机匹配版（WebView 内固定发现入口与玩家临时匹配节点）",
+  "scripts": {
+    "start": "node scripts/start.cjs",
+    "start:internet": "node scripts/start.cjs --internet",
+    "icons": "node scripts/generate-icons.cjs",
+    "pack:android": "node android/build.cjs",
+    "prepare:ai": "node scripts/prepare-offline-runtime.cjs",
+    "test:ai": "node --test --test-concurrency=1 tests/offline-search.test.cjs tests/offline-model.test.cjs",
+    "test:android": "node --test android/tests/*.test.cjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.cjs",
+    "test:dht": "node --test tests/dht-core.test.cjs",
+    "test:legacy-dht": "node --test validation/legacy-dht-native-bundle.test.cjs",
+    "verify:dht-public": "node --test validation/dht-public.test.cjs",
+    "verify:matching-public": "node --test validation/random-public.test.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "onnxruntime-web": "1.31.1",
+    "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "b4a": "1.8.0",
+    "bare": "1.36.0",
+    "bare-events": "2.8.2",
+    "bare-link": "4.0.1",
+    "bare-pack": "3.0.2",
+    "hypercore-crypto": "3.7.0",
+    "hyperdht": "6.34.1",
+    "hyperswarm": "4.17.2",
+    "playwright-core": "1.62.1"
+  }
+}

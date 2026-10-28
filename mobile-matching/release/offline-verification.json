@@ -1,0 +1,36 @@
+{
+  "version": "1.7.6",
+  "apkSha256": "869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f",
+  "modelSha256": "680e53bea21510610a7097e3ded75257d9b028d9fa69b2c6d7a74d6fdd557e93",
+  "simulations": 1024,
+  "failed": 0,
+  "sourceChecks": 97,
+  "androidChecks": 11,
+  "javaUpdateAssertions": 30,
+  "parity": [
+    {
+      "batch": 1,
+      "policy": 7.152557373046875e-7,
+      "value": 7.450580596923828e-8,
+      "process_value": 5.960464477539063e-8
+    },
+    {
+      "batch": 5,
+      "policy": 0.0000011324882507324219,
+      "value": 0.0000012218952178955078,
+      "process_value": 1.2665987014770508e-7
+    }
+  ],
+  "actualApk": {
+    "apk": "869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f",
+    "model": "680e53bea21510610a7097e3ded75257d9b028d9fa69b2c6d7a74d6fdd557e93",
+    "modelId": "saved-20261028-120845-round50",
+    "simulations": 1024,
+    "javaZipAssets": true,
+    "externalRequests": [],
+    "errors": [],
+    "status": "轮到你了 · 已搜索1024次 · 14.2秒",
+    "physicalDevice": false
+  },
+  "physicalDevice": false
+}

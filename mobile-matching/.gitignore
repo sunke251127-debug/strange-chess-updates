@@ -1,0 +1,9 @@
+node_modules/
+*.log
+android/.local/
+release/*.apk
+release/*.idsig
+screenshots/
+artifacts/
+__pycache__/
+*.pyc

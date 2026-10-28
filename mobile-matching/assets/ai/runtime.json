@@ -1,0 +1,20 @@
+{
+  "name": "onnxruntime-web",
+  "version": "1.31.1",
+  "files": {
+    "ort.wasm.min.js": {
+      "bytes": 53796,
+      "sha256": "b8a78c408c40da65fdc8ba0846f7b2948e92a4c6d6b23cc8e4165e428ad95443"
+    },
+    "ort-wasm-simd-threaded.mjs": {
+      "bytes": 24738,
+      "sha256": "30ed0b5cd1182ede931fea448afb567d4dc705ec957af09f108a2be5f770dac3"
+    },
+    "ort-wasm-simd-threaded.wasm": {
+      "bytes": 14848852,
+      "sha256": "4b884c203b0fa48d057be3332c65513ff85aa3c5bddd6946acc0fab7ecda001d"
+    }
+  },
+  "source": "https://www.npmjs.com/package/onnxruntime-web/v/1.31.1",
+  "documentation": "https://onnxruntime.ai/docs/tutorials/web/deploy.html"
+}

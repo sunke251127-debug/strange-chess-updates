@@ -1,0 +1,36 @@
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Strange Chess Mobile, O=Strange Chess, C=CN
+Signer #1 certificate SHA-256 digest: ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0
+Signer #1 certificate SHA-1 digest: 04269c475b3b10cf94fe67313200f7af42c90335
+Signer #1 certificate MD5 digest: a7e6478ca282a3ebaff78d93e085866e
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: 8b1e5675994eedd3681f6fce4b814dce10982378c8b22462ec83866230a08278
+Signer #1 public key SHA-1 digest: 4a705803a52340f8139243ea4ce98799e78ff295
+Signer #1 public key MD5 digest: 895cd5dfac1802abf16b25ffe4103a2a
+
+package: name='cn.strangechess.mobile.matching' versionCode='10706' versionName='1.7.6' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+minSdkVersion:'26'
+targetSdkVersion:'35'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
+uses-permission: name='android.permission.REQUEST_INSTALL_PACKAGES'
+application-label:'这样的象棋'
+application-icon-160:'res/drawable/icon.png'
+application: label='这样的象棋' icon='res/drawable/icon.png'
+launchable-activity: name='cn.strangechess.mobile.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'
