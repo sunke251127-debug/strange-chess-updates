@@ -20,7 +20,7 @@ function fixture(pieces,turn='red'){
 test('the complete FP32 deployment is pinned to a completed historical snapshot',()=>{
   assert.equal(metadata.source_status,'completed');assert.equal(metadata.iteration,50);
   assert.equal(metadata.source_run,'dashboard-train-20261028-120845-2ac09955');
-  assert.equal(metadata.search.simulations,1024);assert.equal(metadata.precision,'float32');
+  assert.equal(metadata.search.simulations,256);assert.equal(metadata.precision,'float32');
   const bytes=fs.readFileSync(path.join(__dirname,'../assets/ai/model.onnx'));
   assert.equal(bytes.length,metadata.bytes);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),metadata.sha256);
   assert.deepEqual(metadata.outputs,['policy','value','process_value']);
@@ -36,19 +36,19 @@ test('hidden identities, IDs and game RNG never enter observations, encoding or 
   assert.deepEqual(a,b);assert.notDeepEqual(a.pieces,c.pieces);
   a.captured.push({kind:'pawn',color:'red'});assert.equal(b.captured.length,0);assert.equal(prepared.root.captured.length,0);
 });
-test('a completed move always adds exactly 1024 simulations, including after tree reuse',async()=>{
+test('a completed move always adds exactly 256 simulations, including after tree reuse',async()=>{
   const state=R.enable(E.createGame(()=>.45),8,3),search=new AI.Search(emptyModel,metadata),root=AI.publicObservation(state);
-  const first=await search.run(root,5);assert.equal(first.simulations,1024);assert.equal(first.visits.reduce((a,b)=>a+b,0),1024);
+  const first=await search.run(root,5);assert.equal(first.simulations,256);assert.equal(first.visits.reduce((a,b)=>a+b,0),256);
   assert.ok(R.legalActions(state).includes(first.action));
-  const next=await search.run(root,6);assert.equal(next.simulations,1024);assert.equal(next.reusedVisits,1024);assert.equal(next.visits.reduce((a,b)=>a+b,0),2048);
+  const next=await search.run(root,6);assert.equal(next.simulations,256);assert.equal(next.reusedVisits,256);assert.equal(next.visits.reduce((a,b)=>a+b,0),512);
   for(const node of search.nodes.values())assert.ok([...node.pending].every(n=>n===0));
 });
-test('visible king capture wins even against hostile model priors and still completes 1024 simulations',async()=>{
+test('visible king capture wins even against hostile model priors and still completes 256 simulations',async()=>{
   const state=fixture([{kind:'king',color:'red',x:0,y:9},{kind:'rook',color:'red',x:4,y:1},{kind:'king',color:'black',x:4,y:0}]);
   const win=(1*9+4)*90+4;
   const model=async(_,n)=>{const outputs=await emptyModel(_,n);for(let i=0;i<n;i++)outputs.policy[i*8100+win]=-100;return outputs;};
   const search=new AI.Search(model,metadata),result=await search.run(AI.publicObservation(state),10);
-  assert.equal(result.action,win);assert.equal(result.simulations,1024);
+  assert.equal(result.action,win);assert.equal(result.simulations,256);
   const moved=R.move(state,4,1,4,0);assert.equal(moved.state.winner,'red');
 });
 test('failed inference discards partial tree and reservations; no random fallback move',async()=>{
@@ -56,11 +56,11 @@ test('failed inference discards partial tree and reservations; no random fallbac
   await assert.rejects(search.run(AI.publicObservation(R.enable(E.createGame(()=>.4),8,3)),2),/inference unavailable/);
   assert.equal(search.nodes.size,0);
 });
-test('games beyond the training horizon can still request 1024 legal simulations',async()=>{
+test('games beyond the training horizon can still request 256 legal simulations',async()=>{
   const state=fixture([{kind:'king',color:'red',x:0,y:9},{kind:'rook',color:'red',x:4,y:1},{kind:'king',color:'black',x:4,y:0}]);
   state.moveNumber=300;
   const result=await new AI.Search(emptyModel,metadata).run(AI.publicObservation(state),4);
-  assert.equal(result.simulations,1024);assert.ok(R.legalActions(state).includes(result.action));
+  assert.equal(result.simulations,256);assert.ok(R.legalActions(state).includes(result.action));
 });
 const trainer=path.resolve(__dirname,'../../training/check-limit.cjs');
 test('mobile single-player legality matches the original training rules over a real trajectory',{skip:!fs.existsSync(trainer)},()=>{

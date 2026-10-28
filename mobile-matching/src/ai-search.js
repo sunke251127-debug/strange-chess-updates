@@ -4,7 +4,7 @@
 })(globalThis,function(E,Check,Rules){
   'use strict';
   const KINDS=['rook','horse','elephant','advisor','king','cannon','pawn'];
-  const COUNTS=[2,2,2,2,1,2,5], SIZE=44*90, SIMULATIONS=1024;
+  const COUNTS=[2,2,2,2,1,2,5], SIZE=44*90, SIMULATIONS=256;
   const POINTS={rook:10,horse:5,elephant:2,advisor:2,king:0,cannon:5,pawn:1};
   const copy=value=>JSON.parse(JSON.stringify(value));
   const square=p=>p.y*9+p.x;
@@ -187,7 +187,7 @@
           progress({done:Math.min(SIMULATIONS,start+pending.length),total:SIMULATIONS,evaluations,batches,maximumDepth});
         }
       }catch(error){this.reset();throw error;}
-      if(root.visits.reduce((a,b)=>a+b,0)-reused!==SIMULATIONS)throw Error('Incomplete 1024-simulation search');
+      if(root.visits.reduce((a,b)=>a+b,0)-reused!==SIMULATIONS)throw Error('Incomplete '+SIMULATIONS+'-simulation search');
       let best=0;for(let i=1;i<actions.length;i++)if(root.visits[i]>root.visits[best])best=i;
       const result={action:root.actions[best],simulations:SIMULATIONS,visits:Array.from(root.visits),actions:root.actions.slice(),
         evaluations,batches,reusedVisits:reused,meanDepth:depthSum/SIMULATIONS,maximumDepth};

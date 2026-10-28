@@ -1,17 +1,19 @@
 # 根本就没有这样的象棋
 
-手机版源码、固定模型与安装包仓库。当前版本 **1.7.6**，安装包约 **15.6 MiB**。
+手机版源码、固定模型与安装包仓库。当前版本 **1.7.7**，安装包约 **15.6 MiB**。
 
-[下载最新版安装包](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/strange-chess-matching-android.apk) · [1.7.6发布说明](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.6) · [玩法介绍](#玩法介绍)
+[下载最新版安装包](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/strange-chess-matching-android.apk) · [1.7.7发布说明](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.7) · [玩法介绍](#玩法介绍)
 
 ## 本次更新
 
-- 新增**单机对战**：在手机本地运行完整历史训练模型，每手完成**1024次搜索**后落子，无需电脑、服务器或首次下载模型。
+单机每手搜索从上一版1024次降低为256次，减少思考等待，原历史权重继续沿用。
+
+- 新增**单机对战**：在手机本地运行完整历史训练模型，每手完成**256次搜索**后落子，无需电脑、服务器或首次下载模型。
 - 固定采用已完成的第50轮历史权重，与当前训练任务隔离；模型及WASM运行时完整随APK提供。
 - 支持选择执红/执黑、黑方视角、思考进度、独立存档、继续对局、悔棋和取消旧搜索。
 - 保留本地双人、随机联机、好友直连、加密中继、双方申请悔棋/新局以及原有界面。
 
-[手机版源码与本地构建](mobile-matching) · [固定模型来源](mobile-matching/assets/ai/model.json) · [验证记录](mobile-matching/release/1.7.6-验证记录.md)
+[手机版源码与本地构建](mobile-matching) · [固定模型来源](mobile-matching/assets/ai/model.json) · [验证记录](mobile-matching/release/1.7.7-验证记录.md)
 
 ## 玩法介绍
 
@@ -48,7 +50,7 @@
 
 ### 单机、本地双人与联机
 
-- **单机对战**：顶部点“单机对战”，选红黑后开始。模型在手机内完成每手1024次搜索，断网可玩；同一组棋子连续将军最多8次，相同公开局面最多3次。
+- **单机对战**：顶部点“单机对战”，选红黑后开始。模型在手机内完成每手256次搜索，断网可玩；同一组棋子连续将军最多8次，相同公开局面最多3次。
 - **本地双人**：一台手机轮流操作红黑双方，可用底部“悔棋”和“新棋局”。
 - **随机联机**：双方打开顶部“联机对战”，点击“随机联机”等待配对；网络受限时会尝试加密中继。
 - **好友直连**：一方点“邀请好友直连”并发送邀请；另一方粘贴邀请点“加入 / 连接”，再把生成的回复码发回；邀请方粘贴回复码并点“加入 / 连接”。
@@ -67,12 +69,12 @@
 
 ## 校验
 
-1.7.6：versionCode 10706，16,366,384字节。
+1.7.7：versionCode 10707，16,366,384字节。
 
-SHA256：`869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f`
+SHA256：`ca77fe518351975b1970373f662a0151a7877301dabe8ac23d071c2217ecf4ba`
 
 [更新清单](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/android-update.json) · [校验和](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/SHA256SUMS.txt)
 
 本仓库同时提供手机版源码、完整固定模型、安装包、更新清单和校验和。英文附件名与内部包名保留以兼容升级协议，手机显示名称不含“匹配版”。
 
-单机模型需要系统WebView支持WebAssembly/SIMD。实际APK资源与本地完整模型已经完成1024次搜索验证；未在实体手机上测量搜索耗时。
+单机模型需要系统WebView支持WebAssembly/SIMD。实际APK资源与本地完整模型已经完成256次搜索验证；未在实体手机上测量搜索耗时。

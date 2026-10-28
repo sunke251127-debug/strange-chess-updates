@@ -6,6 +6,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const crypto=require('node:crypto');
 const {spawnSync}=require('node:child_process');
+const {SIMULATIONS}=require('../src/ai-search.js');
 const ROOT=path.resolve(__dirname,'..'),REPO='sunke251127-debug/strange-chess-updates';
 const info=require('../release/android-build-info.json'),model=require('../assets/ai/model.json');
 const tag='mobile-v'+info.versionName,APK_NAME='strange-chess-matching-android.apk';
@@ -58,7 +59,7 @@ function validate(){
   const apk=path.join(ROOT,'release',info.file),bytes=fs.readFileSync(apk);
   if(bytes.length!==info.bytes||sha(bytes)!==info.sha256)throw Error('Signed APK and metadata differ');
   if(info.packageId!=='cn.strangechess.mobile.matching'||info.signerSha256!=='ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0')throw Error('Wrong upgrade identity');
-  if(info.offlineModel.simulations!==1024||info.offlineModel.sha256!==model.sha256||model.source_status!=='completed')throw Error('Wrong offline model');
+  if(info.offlineModel.simulations!==SIMULATIONS||info.offlineModel.sha256!==model.sha256||model.source_status!=='completed')throw Error('Wrong offline model');
   if(sha(fs.readFileSync(path.join(ROOT,'assets/ai/model.onnx')))!==model.sha256)throw Error('Model changed');
   const manifest=require('../release/android-update.json');
   if(manifest.sha256!==info.sha256||manifest.bytes!==info.bytes||manifest.versionName!==info.versionName||manifest.url!==`https://github.com/${REPO}/releases/download/${tag}/${APK_NAME}`)throw Error('Update manifest differs');
@@ -69,7 +70,7 @@ function validate(){
     if(sha(body)!==expected)throw Error('Rebuild APK after changing '+url);
   }
   const verification=require('../release/offline-verification.json');
-  if(verification.apkSha256!==info.sha256||verification.failed!==0||verification.simulations!==1024)throw Error('Current APK must pass verification before publishing');
+  if(verification.apkSha256!==info.sha256||verification.failed!==0||verification.simulations!==SIMULATIONS)throw Error('Current APK must pass verification before publishing');
   return apk;
 }
 async function publishSource(entries){
@@ -98,7 +99,7 @@ async function publishSource(entries){
     }else tree.push({path:entry.path,mode:'100644',type:'blob',content:entry.bytes.toString('utf8')});
   }
   const created=await api(`/repos/${REPO}/git/trees`,{method:'POST',json:{base_tree:base,tree}});
-  const saved=await api(`/repos/${REPO}/git/commits`,{method:'POST',json:{message:'Add mobile offline model play with 1024 simulations per move',tree:created.sha,parents:[parent]}});
+  const saved=await api(`/repos/${REPO}/git/commits`,{method:'POST',json:{message:'Update mobile offline search to '+SIMULATIONS+' simulations per move',tree:created.sha,parents:[parent]}});
   const current=await api(`/repos/${REPO}/git/ref/heads/main`);
   if(current.object.sha!==parent)throw Error('GitHub main changed during sync; review the new head before retrying');
   await api(`/repos/${REPO}/git/refs/heads/main`,{method:'PATCH',json:{sha:saved.sha,force:false}});
@@ -127,7 +128,7 @@ async function publishRelease(apk,commit){
 }
 async function main(){
   const apk=validate(),entries=files();
-  console.log(JSON.stringify({version:info.versionName,apkBytes:info.bytes,apkSha256:info.sha256,sourceFiles:entries.length,sourceBytes:entries.reduce((n,e)=>n+e.bytes.length,0),model:model.id,simulations:1024}));
+  console.log(JSON.stringify({version:info.versionName,apkBytes:info.bytes,apkSha256:info.sha256,sourceFiles:entries.length,sourceBytes:entries.reduce((n,e)=>n+e.bytes.length,0),model:model.id,simulations:SIMULATIONS}));
   if(!process.argv.includes('--publish'))return;
   const user=await api('/user');if(user.login!=='sunke251127-debug')throw Error('Wrong GitHub publisher account');
   const commit=await publishSource(entries),release=await publishRelease(apk,commit);

@@ -6,7 +6,7 @@ const ready=(async()=>{
   const response=await fetch('/ai/model.json');
   if(!response.ok)throw Error('历史模型信息无法读取，请重新安装完整 APK');
   metadata=await response.json();
-  if(metadata.source_status!=='completed'||metadata.search.simulations!==1024)throw Error('历史模型配置无效');
+  if(metadata.source_status!=='completed'||metadata.search.simulations!==StrangeChessAI.SIMULATIONS)throw Error('历史模型配置无效');
   const modelResponse=await fetch('/ai/model.onnx');
   if(!modelResponse.ok)throw Error('本地模型无法读取，请重新安装完整 APK');
   const bytes=await modelResponse.arrayBuffer();

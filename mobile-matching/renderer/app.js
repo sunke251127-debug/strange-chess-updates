@@ -460,7 +460,7 @@
     if (mode === 'local') {
       modeLabel.textContent = '本地双人 · 同屏轮流';
     } else if (mode === 'solo') {
-      modeLabel.textContent = `单机对战 · 你执${soloGame.humanColor === E.RED ? '红' : '黑'} · 每手1024次`;
+      modeLabel.textContent = `单机对战 · 你执${soloGame.humanColor === E.RED ? '红' : '黑'} · 每手${AI.SIMULATIONS}次`;
     } else if (online.room) {
       modeLabel.textContent = `${(online.room?.random || online.room?.transport === 'dht') ? '随机联机' : '好友直连'} · 你是${online.seatColor ? colorName(online.seatColor).replace('方', '') + '方' : '观战方'}`;
     } else if ((directLink?.randomMatch || directLink?.transport === 'dht')) {
@@ -706,12 +706,13 @@
     box.dataset.model = lastSoloSearch?.modelId || soloClient?.metadata?.id || '';
     progress.hidden = phase !== 'thinking';
     progress.value = soloStatus.done || 0;
+    progress.max = AI.SIMULATIONS;
     $('retryAiBtn').hidden = phase !== 'error';
     if (phase === 'error') text.textContent = soloStatus.message;
     else if (phase === 'loading' || phase === 'idle') text.textContent = '正在加载手机本地模型…';
-    else if (phase === 'thinking') text.textContent = `模型思考中 · ${soloStatus.done || 0} / 1024`;
+    else if (phase === 'thinking') text.textContent = `模型思考中 · ${soloStatus.done || 0} / ${AI.SIMULATIONS}`;
     else if (soloGame.state.winner) text.textContent = '本局结束 · 历史模型第50轮';
-    else text.textContent = lastSoloSearch ? `轮到你了 · 已搜索1024次 · ${lastSoloSearch.seconds.toFixed(1)}秒` : '历史模型第50轮 · 轮到你了';
+    else text.textContent = lastSoloSearch ? `轮到你了 · 已搜索${AI.SIMULATIONS}次 · ${lastSoloSearch.seconds.toFixed(1)}秒` : '历史模型第50轮 · 轮到你了';
   }
 
   function ensureSoloModel() {
@@ -736,7 +737,7 @@
     try {
       const result = await soloClient.think(AI.publicObservation(state));
       if (generation !== soloGeneration || mode !== 'solo' || soloGame.state !== state) return;
-      if (result.simulations !== 1024 || !AIRules.legalActions(state).includes(result.action)) throw Error('模型返回了无效落子，请重试');
+      if (result.simulations !== AI.SIMULATIONS || !AIRules.legalActions(state).includes(result.action)) throw Error('模型返回了无效落子，请重试');
       lastSoloSearch = result;
       soloThinking = false;
       const from = Math.floor(result.action / 90), to = result.action % 90;

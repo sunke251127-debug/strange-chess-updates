@@ -10,7 +10,7 @@ const ROOT=path.resolve(__dirname,'../..'),ANDROID=path.join(ROOT,'android');
 const tools=JSON.parse(fs.readFileSync(path.join(ANDROID,'.local/toolchain.json'),'utf8').replace(/^\uFEFF/,''));
 const info=require('../../release/android-build-info.json'),model=require('../../assets/ai/model.json');
 const apk=path.join(ROOT,'release',info.file);
-test('actual signed APK ZIP and Java loopback server run the complete local model for a 1024-search move with external requests blocked',{timeout:180000},async()=>{
+test('actual signed APK ZIP and Java loopback server run the complete local model for a 256-search move with external requests blocked',{timeout:180000},async()=>{
   const java=name=>path.join(tools.javaBin,name+'.exe');
   const classes=fs.mkdtempSync(path.join(process.env.LOCALAPPDATA,'StrangeChessMobileBuild/offline-apk-test-'));
   const compiled=spawnSync(java('javac'),['-encoding','UTF-8','--release','8','-d',classes,
@@ -31,7 +31,7 @@ test('actual signed APK ZIP and Java loopback server run the complete local mode
     assert.equal((await fetch(origin+'/ai/../android-password.txt')).status,404);
     browser=await chromium.launch({channel:'msedge',headless:true});
     const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),external=[],errors=[];
-    await context.addInitScript(()=>{window.AndroidShell={getVersion:()=>'1.7.6',getServer:()=>'',setServer(){},checkUpdate(){},getUpdateState:()=>'{"status":"idle","message":"本地模型已内置"}',installUpdate(){}};});
+    await context.addInitScript(()=>{window.AndroidShell={getVersion:()=>'1.7.7',getServer:()=>'',setServer(){},checkUpdate(){},getUpdateState:()=>'{"status":"idle","message":"本地模型已内置"}',installUpdate(){}};});
     await context.route('**/*',route=>{if(new URL(route.request().url()).origin===origin)return route.continue();external.push(route.request().url());return route.abort();});
     const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
     await page.goto(origin+'/index.html');
@@ -42,13 +42,15 @@ test('actual signed APK ZIP and Java loopback server run the complete local mode
     assert.notEqual(await page.locator('#aiStatus').getAttribute('data-phase'),'error',await page.locator('#aiStatusText').textContent());
     await page.locator('#toolsBtn').tap();assert.equal(await page.locator('#mobilePanel').isVisible(),true,'the board UI stays responsive during real WASM search');
     await page.locator('#closePanelBtn').tap();
-    await page.waitForFunction(()=>document.querySelector('#aiStatus').dataset.completed==='1024',null,{timeout:120000});
+    await page.waitForFunction(()=>document.querySelector('#aiStatus').dataset.completed==='256',null,{timeout:120000});
     assert.equal(await page.locator('#moveNumber').textContent(),'第 1 手');
     assert.equal(await page.locator('#turnText').textContent(),'黑方行棋');
     assert.equal(await page.locator('#aiStatus').getAttribute('data-model'),model.id);
+    assert.equal(await page.locator('#aiProgress').getAttribute('max'),'256');
+    assert.match(await page.locator('#modeLabel').textContent(),/每手256次/);
     assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
-    await page.screenshot({path:path.join(ROOT,'screenshots/apk-1.7.6-offline.png')});
-    const report={apk:info.sha256,model:model.sha256,modelId:model.id,simulations:1024,javaZipAssets:true,externalRequests:external,errors,status:await page.locator('#aiStatusText').textContent(),physicalDevice:false};
+    await page.screenshot({path:path.join(ROOT,'screenshots/apk-1.7.7-offline.png')});
+    const report={apk:info.sha256,model:model.sha256,modelId:model.id,simulations:256,javaZipAssets:true,externalRequests:external,errors,status:await page.locator('#aiStatusText').textContent(),physicalDevice:false};
     fs.writeFileSync(path.join(ROOT,'artifacts/offline-apk.json'),JSON.stringify(report,null,2));
   }finally{await browser?.close();child.stdin.end('\n');}
 });

@@ -35,7 +35,7 @@
     think(observation){
       if(!this.worker||!this.metadata||this.pending)return Promise.reject(Error('本地模型尚未就绪'));
       const id=++this.serial,seed=crypto.getRandomValues(new Uint32Array(1))[0];
-      this.onStatus({phase:'thinking',done:0,total:1024});
+      this.onStatus({phase:'thinking',done:0,total:window.StrangeChessAI.SIMULATIONS});
       return new Promise((resolve,reject)=>{
         this.pending={id,resolve,reject};this.worker.postMessage({type:'search',id,observation,seed});
       });

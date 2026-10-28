@@ -1,14 +1,16 @@
 # 根本就没有这样的象棋 · 安卓 / 鸿蒙 4.2
 
-当前版本 **1.7.6（10706）**，安装包约 **15.6 MiB**，内置完整历史模型和推理运行时。
+当前版本 **1.7.7（10707）**，安装包约 **15.6 MiB**，内置完整历史模型和推理运行时。
 
 - [下载最新版](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/strange-chess-matching-android.apk)
-- [发布页面](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.6)
+- [发布页面](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.7)
 - [本地安装包](../release/根本就没有这样的象棋-安卓及鸿蒙4.2.apk)
 
-## 1.7.6 单机对战
+## 1.7.7 单机对战
 
-顶部点“单机对战”，选择红黑阵营后开始。固定使用上一轮已完成训练的第50轮快照，完整模型保存在APK里；手机本地每手完成1024次搜索后落子，不需要电脑、服务器或下载模型。思考进度可见，悔棋和新局会取消旧搜索。
+每手搜索由上一版的1024次降低为256次，搜索预算为原来的四分之一。
+
+顶部点“单机对战”，选择红黑阵营后开始。固定使用上一轮已完成训练的第50轮快照，完整模型保存在APK里；手机本地每手完成256次搜索后落子，不需要电脑、服务器或下载模型。思考进度可见，悔棋和新局会取消旧搜索。
 
 单机存档与本地双人分开，额外写入应用私有存储，重启后可以继续。单机采用模型对应的将军8次、重复局面3次限制；联机和本地双人规则不变。系统WebView需要支持WebAssembly与SIMD，模型加载报错时可更新系统WebView后重试。
 
@@ -39,7 +41,7 @@
 
 - 文件：根本就没有这样的象棋-安卓及鸿蒙4.2.apk
 - 大小：16,366,384字节
-- SHA256：`869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f`
+- SHA256：`ca77fe518351975b1970373f662a0151a7877301dabe8ac23d071c2217ecf4ba`
 - 包名：cn.strangechess.mobile.matching
 - 发布者证书SHA256：`ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0`
 - v1/v2/v3签名通过；没有原生库、Bare Kit或DHT bundle。
@@ -48,7 +50,7 @@
 
 ## 验证与构建
 
-本次完成完整模型数值对照、真实APK包内模型1024次搜索、单机存档/取消/悔棋、PWA缓存、原有联机及签名更新检查。[完整记录](../release/1.7.6-验证记录.md)。
+本次完成完整模型数值对照、真实APK包内模型256次搜索、单机存档/取消/悔棋、PWA缓存、原有联机及签名更新检查。[完整记录](../release/1.7.7-验证记录.md)。
 
 本机没有adb、模拟器或实体手机；系统软键盘、安装/升级、后台调度及跨运营商连接未实测。
 
@@ -56,7 +58,7 @@
 
 ```powershell
 node android/build.cjs
-node scripts/prepare-github-release.cjs mobile-v1.7.6
+node scripts/prepare-github-release.cjs mobile-v1.7.7
 ```
 
 只编译6个Java源文件，不下载Bare Kit/NDK或替换签名；发布附件仅包含APK、更新清单与校验和。

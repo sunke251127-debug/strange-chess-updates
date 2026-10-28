@@ -79,7 +79,7 @@ test('native solo preferences restore into a fresh web origin and receive undo s
     assert.equal(await second.page.locator('#moveNumber').textContent(),'第 0 手');
   }finally{await second.close();}
 });
-test('real historical model plays 1024-search moves locally; solo saves, undo, black view and cancellation preserve other modes',{timeout:240000},async()=>{
+test('real historical model plays 256-search moves locally; solo saves, undo, black view and cancellation preserve other modes',{timeout:240000},async()=>{
   const run=await launch();
   try{
     const page=run.page;
@@ -88,11 +88,13 @@ test('real historical model plays 1024-search moves locally; solo saves, undo, b
     const original=await page.evaluate(()=>localStorage.getItem('strange-chess-offline-v1'));
     await page.locator('#soloModeBtn').tap();await page.locator('#startSoloBtn').tap();
     await page.waitForFunction(()=>document.querySelector('#aiStatus').dataset.phase==='ready',null,{timeout:60000});
+    assert.equal(await page.locator('#aiProgress').getAttribute('max'),'256');
+    assert.match(await page.locator('#modeLabel').textContent(),/每手256次/);
     await page.locator('.cell.is-selectable').first().tap();await page.locator('.cell.is-legal,.cell.is-capture').first().tap();
     await page.waitForFunction(()=>document.querySelector('#aiStatus').dataset.phase==='thinking');
     assert.equal(await page.locator('.cell.is-selectable').count(),0,'human cannot move for the model');
     await page.waitForFunction(()=>document.querySelector('#moveNumber').textContent==='第 2 手',null,{timeout:120000});
-    assert.equal(await page.locator('#aiStatus').getAttribute('data-completed'),'1024');
+    assert.equal(await page.locator('#aiStatus').getAttribute('data-completed'),'256');
     assert.equal(await page.locator('#aiStatus').getAttribute('data-model'),'saved-20261028-120845-round50');
     const completed=await page.locator('#aiStatusText').textContent();
     await page.screenshot({path:path.join(ROOT,'screenshots/offline-model-red.png')});
@@ -107,7 +109,7 @@ test('real historical model plays 1024-search moves locally; solo saves, undo, b
     await page.waitForTimeout(1200);
     assert.equal(await page.locator('#moveNumber').textContent(),'第 1 手','cancelled worker cannot play into two-player mode');
     await page.locator('#soloModeBtn').tap();await page.locator('#startSoloBtn').tap();
-    await page.waitForFunction(()=>document.querySelector('#moveNumber').textContent==='第 1 手'&&document.querySelector('#aiStatus').dataset.completed==='1024',null,{timeout:120000});
+    await page.waitForFunction(()=>document.querySelector('#moveNumber').textContent==='第 1 手'&&document.querySelector('#aiStatus').dataset.completed==='256',null,{timeout:120000});
     assert.equal(await page.locator('#boardGrid').getAttribute('data-perspective'),'black');
     assert.equal(await page.locator('#turnText').textContent(),'黑方行棋');
     assert.equal(await page.locator('#quickUndoBtn').isDisabled(),true,'opening model move cannot undo a human move that never happened');

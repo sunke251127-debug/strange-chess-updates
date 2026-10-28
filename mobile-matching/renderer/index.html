@@ -39,7 +39,7 @@
         <div id="mobileStatus" class="mobile-status" aria-live="polite"></div>
         <div id="aiStatus" class="ai-status" role="status" hidden>
           <span id="aiStatusText">本地模型准备中</span>
-          <progress id="aiProgress" max="1024" value="0" aria-label="模型搜索进度" hidden></progress>
+          <progress id="aiProgress" max="256" value="0" aria-label="模型搜索进度" hidden></progress>
           <button id="retryAiBtn" class="soft-btn" type="button" hidden>重试</button>
         </div>
         <div class="board-frame">
@@ -205,7 +205,7 @@
     <div class="modal-inner">
       <div class="modal-heading"><span class="eyebrow">手机本地模型</span><button id="closeSoloBtn" class="round-close" type="button" aria-label="关闭">×</button></div>
       <h2 id="soloTitle">和模型下一盘</h2>
-      <p class="helper-text">内置已完成训练的第 50 轮历史权重，每手搜索 1024 次。模型随安装包保存在手机上，断网也能下。</p>
+      <p class="helper-text">内置已完成训练的第 50 轮历史权重，每手搜索 256 次。模型随安装包保存在手机上，断网也能下。</p>
       <fieldset class="solo-colors"><legend>选择你的阵营</legend>
         <label><input type="radio" name="soloColor" value="red" checked> 执红 · 先手</label>
         <label><input type="radio" name="soloColor" value="black"> 执黑 · 后手</label>

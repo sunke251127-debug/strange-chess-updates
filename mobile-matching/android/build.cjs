@@ -8,6 +8,7 @@ const PACKAGE_ID = 'cn.strangechess.mobile.matching';
 const EDITION = 'matching';
 const APK_BASE = '根本就没有这样的象棋-安卓及鸿蒙4.2';
 const MAX_APK_BYTES = 64 * 1024 * 1024;
+const { SIMULATIONS } = require('../src/ai-search.js');
 // Read-only reuse of the installed publisher identity. The build must never
 // mint a replacement key, or Android would reject the branch as an update.
 const EXPECTED_SIGNER = 'ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0';
@@ -48,7 +49,7 @@ function run(command, args, options = {}) {
 function walk(dir) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(path.join(dir, entry.name)) : [path.join(dir, entry.name)]); }
 async function main() {
   const model = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/ai/model.json'), 'utf8'));
-  if (model.source_status !== 'completed' || model.search.simulations !== 1024) throw new Error('Expected a completed historical model with 1024 simulations');
+  if (model.source_status !== 'completed' || model.search.simulations !== SIMULATIONS) throw new Error('Expected a completed historical model with '+SIMULATIONS+' simulations');
   const modelBytes = fs.readFileSync(path.join(ROOT, 'assets/ai/model.onnx'));
   if (modelBytes.length !== model.bytes || crypto.createHash('sha256').update(modelBytes).digest('hex') !== model.sha256) throw new Error('Offline model integrity mismatch');
   const configFile = path.join(__dirname, '.local/toolchain.json');
@@ -119,7 +120,7 @@ async function main() {
   const info = { file: path.basename(output), platform: 'android', edition: EDITION, packageId: PACKAGE_ID, versionName, versionCode,
     minSdk: 26, targetSdk: 35, nativeLibraries: false, webviewOnly: true,
     matchingTransport: 'webrtc-or-encrypted-relay', discovery: 'public-wss-mqtt', maxBytes: MAX_APK_BYTES,
-    offlineModel: { id: model.id, sourceRun: model.source_run, iteration: model.iteration, sourceSha256: model.source_sha256, sha256: model.sha256, simulations: 1024, precision: model.precision },
+    offlineModel: { id: model.id, sourceRun: model.source_run, iteration: model.iteration, sourceSha256: model.source_sha256, sha256: model.sha256, simulations: SIMULATIONS, precision: model.precision },
     bytes: apk.length, sha256: crypto.createHash('sha256').update(apk).digest('hex'), signerSha256,
     assetHashes, builtAt: new Date().toISOString() };
   fs.writeFileSync(path.join(release, 'android-build-info.json'), JSON.stringify(info, null, 2));

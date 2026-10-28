@@ -74,7 +74,7 @@
     "process_weight": 0.003196522183863956
   },
   "search": {
-    "simulations": 1024,
+    "simulations": 256,
     "max_depth": 64,
     "inference_batch_size": 8,
     "c_puct": 1.5,

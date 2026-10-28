@@ -16,7 +16,7 @@ Signer #1 public key SHA-256 digest: 8b1e5675994eedd3681f6fce4b814dce10982378c8b
 Signer #1 public key SHA-1 digest: 4a705803a52340f8139243ea4ce98799e78ff295
 Signer #1 public key MD5 digest: 895cd5dfac1802abf16b25ffe4103a2a
 
-package: name='cn.strangechess.mobile.matching' versionCode='10706' versionName='1.7.6' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+package: name='cn.strangechess.mobile.matching' versionCode='10707' versionName='1.7.7' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 minSdkVersion:'26'
 targetSdkVersion:'35'
 uses-permission: name='android.permission.INTERNET'

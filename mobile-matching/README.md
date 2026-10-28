@@ -1,34 +1,36 @@
-# 根本就没有这样的象棋 1.7.6
+# 根本就没有这样的象棋 1.7.7
 
 mobile-matching 中的手机版，新增完整模型在手机本地运行的单机对战，并保留本地双人、随机联机、好友直连、加密中继和本地存档。
 
 ## 下载与更新
 
 - [下载最新安装包](https://github.com/sunke251127-debug/strange-chess-updates/releases/latest/download/strange-chess-matching-android.apk)
-- [1.7.6 发布页面](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.6)
+- [1.7.7 发布页面](https://github.com/sunke251127-debug/strange-chess-updates/releases/tag/mobile-v1.7.7)
 - [本地安装包](release/根本就没有这样的象棋-安卓及鸿蒙4.2.apk)
-- [安装说明](android/README.md) · [本次验证记录](release/1.7.6-验证记录.md)
+- [安装说明](android/README.md) · [本次验证记录](release/1.7.7-验证记录.md)
 
-版本 **1.7.6 / 10706**，安装包 **16,366,384 字节（约 15.6 MiB）**。SHA256：
+版本 **1.7.7 / 10707**，安装包 **16,366,384 字节（约 15.6 MiB）**。SHA256：
 
-`869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f`
+`ca77fe518351975b1970373f662a0151a7877301dabe8ac23d071c2217ecf4ba`
 
 已安装 **1.7.2至1.7.5** 可以在应用内检查更新，下载后由系统确认覆盖安装。**1.7.1 及更早版本**需要先手动下载并覆盖安装一次，无需卸载；本分支的包名和证书保持一致。
 
 默认更新源：https://github.com/sunke251127-debug/strange-chess-updates 。固定清单是该仓库 releases/latest/download/android-update.json。远程附件名 strange-chess-matching-android.apk 和内部包名 cn.strangechess.mobile.matching 保持不变，以兼容已安装版本。
 
-## 1.7.6 单机对战
+## 1.7.7 单机对战
+
+每手搜索由上一版的1024次降低为256次，搜索预算为原来的四分之一。
 
 顶部点“单机对战”，选择执红或执黑，再点“开始新局”；已有未结束的单机棋局可继续。黑方以己方在下方显示。悔棋恢复到你上次落子之前，思考中也可以悔棋、开始新局或切换模式，过期搜索不会落子。
 
 - 固定使用已完成的历史运行 `dashboard-train-20261028-120845-2ac09955` 的 `candidate-000050.pt`，与正在训练的任务没有读取或更新关系。
 - 随 APK 内置完整 FP32 ONNX 模型（13,354,373 字节）和 ONNX Runtime Web 1.31.1 的 WASM 运行时；无需电脑、推理服务器、CDN 或首次下载模型。
-- 每手完成 **1024 次新增 MCTS 模拟**后才落子，显示实际搜索进度；复用旧访问不会替代这 1024 次。策略、终局价值和过程价值权重均保留，搜索使用历史模型对应的价值目标。
+- 每手完成 **256 次新增 MCTS 模拟**后才落子，显示实际搜索进度；复用旧访问不会替代这 256 次。策略、终局价值和过程价值权重均保留，搜索使用历史模型对应的价值目标。
 - 网络及搜索在 Web Worker 中运行，主界面可继续操作。模型只接收公开棋盘；真实暗子身份和对局随机数不会传入搜索，模拟暗子从公开剩余池独立采样。
 - 单机采用该模型的训练规则：同一组棋子最多连续将军8次，相同公开局面最多出现3次；这些限制不影响本地双人和联机规则。
 - 单机与本地双人独立存档。APK单机存档额外写入应用私有偏好设置，应用重启、回环端口变化后仍可恢复。PWA完整缓存模型和运行时后也能离线对战。
 
-模型 SHA256：`680e53bea21510610a7097e3ded75257d9b028d9fa69b2c6d7a74d6fdd557e93`。来源、全部推理配置及校验值见 [model.json](assets/ai/model.json)。本机包内真实搜索约14秒一手，仅作开发机记录，手机耗时尚未实测。
+模型 SHA256：`680e53bea21510610a7097e3ded75257d9b028d9fa69b2c6d7a74d6fdd557e93`。来源、全部推理配置及校验值见 [model.json](assets/ai/model.json)。本机包内真实搜索约3.3秒一手，仅作开发机记录，手机耗时尚未实测。
 
 ## 1.7.5 已有功能
 
@@ -66,7 +68,7 @@ mobile-matching 中的手机版，新增完整模型在手机本地运行的单�
 
 ```powershell
 node android/build.cjs
-node scripts/prepare-github-release.cjs mobile-v1.7.6
+node scripts/prepare-github-release.cjs mobile-v1.7.7
 ```
 
 APK使用系统WebView和6个Java源文件，内置完整模型与WASM，没有.so、Bare Kit或原生DHT。旧DHT源码只供开发回归，不参与APK构建。随机联机依赖公共WSS发现入口，配对后使用双方WebRTC或加密中继；公共服务和运营商网络会影响连通率。

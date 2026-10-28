@@ -74,7 +74,7 @@ def main():
                     input_shape=[44, 10, 9], outputs=['policy', 'value', 'process_value'],
                     precision='float32', model_file='model.onnx', bytes=model_path.stat().st_size,
                     sha256=digest(model_path), training_config=config,
-                    search=dict(simulations=1024, max_depth=64, inference_batch_size=8,
+                    search=dict(simulations=256, max_depth=64, inference_batch_size=8,
                                 c_puct=1.5, noise=False, temperature=0))
     (output / 'model.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     # Deterministic real-game observations for cross-runtime numerical checks.

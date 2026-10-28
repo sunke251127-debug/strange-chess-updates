@@ -1,6 +1,6 @@
 {
   "name": "strange-chess-mobile",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "private": true,
   "description": "根本就没有这样的象棋：安卓与鸿蒙手机匹配版（WebView 内固定发现入口与玩家临时匹配节点）",
   "scripts": {

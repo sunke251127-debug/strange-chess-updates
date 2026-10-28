@@ -1,12 +1,13 @@
 {
-  "version": "1.7.6",
-  "apkSha256": "869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f",
+  "version": "1.7.7",
+  "apkSha256": "ca77fe518351975b1970373f662a0151a7877301dabe8ac23d071c2217ecf4ba",
   "modelSha256": "680e53bea21510610a7097e3ded75257d9b028d9fa69b2c6d7a74d6fdd557e93",
-  "simulations": 1024,
+  "simulations": 256,
   "failed": 0,
-  "sourceChecks": 97,
-  "androidChecks": 11,
-  "javaUpdateAssertions": 30,
+  "sourceChecks": 11,
+  "apkAndManifestChecks": 7,
+  "sourceModelUnchanged": true,
+  "referenceVersion": "1.7.6",
   "parity": [
     {
       "batch": 1,
@@ -22,14 +23,14 @@
     }
   ],
   "actualApk": {
-    "apk": "869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f",
+    "apk": "ca77fe518351975b1970373f662a0151a7877301dabe8ac23d071c2217ecf4ba",
     "model": "680e53bea21510610a7097e3ded75257d9b028d9fa69b2c6d7a74d6fdd557e93",
     "modelId": "saved-20261028-120845-round50",
-    "simulations": 1024,
+    "simulations": 256,
     "javaZipAssets": true,
     "externalRequests": [],
     "errors": [],
-    "status": "轮到你了 · 已搜索1024次 · 14.2秒",
+    "status": "轮到你了 · 已搜索256次 · 3.3秒",
     "physicalDevice": false
   },
   "physicalDevice": false

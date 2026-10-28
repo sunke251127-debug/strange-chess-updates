@@ -10,6 +10,7 @@ const REPOSITORY = 'sunke251127-debug/strange-chess-updates';
 const APK_ASSET = 'strange-chess-matching-android.apk';
 const MANIFEST = 'android-update.json';
 const packageJson = require('../package.json');
+const { SIMULATIONS } = require('../src/ai-search.js');
 const release = path.join(ROOT, 'release');
 const info = JSON.parse(fs.readFileSync(path.join(release, 'android-build-info.json'), 'utf8'));
 const tag = process.argv[2] || 'mobile-v' + packageJson.version;
@@ -24,7 +25,7 @@ const bytes = fs.readFileSync(apk);
 const sha256 = crypto.createHash('sha256').update(bytes).digest('hex');
 if (bytes.length !== info.bytes || sha256 !== info.sha256) throw new Error('APK metadata does not match the file');
 if (bytes.length > 64 * 1024 * 1024) throw new Error('APK exceeds the offline-model 64MiB limit');
-if (info.offlineModel?.simulations !== 1024) throw new Error('Expected packaged offline-model search with 1024 simulations');
+if (info.offlineModel?.simulations !== SIMULATIONS) throw new Error('Expected packaged offline-model search with '+SIMULATIONS+' simulations');
 const url = 'https://github.com/' + REPOSITORY + '/releases/download/' + encodeURIComponent(tag) + '/' + APK_ASSET;
 const manifest = {
   available: true,

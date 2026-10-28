@@ -1,1 +1,1 @@
-869de9f55d9102abd64210aadf1bd7fea19e11f68edf85550f796bcc99bfc73f  strange-chess-matching-android.apk
+ca77fe518351975b1970373f662a0151a7877301dabe8ac23d071c2217ecf4ba  strange-chess-matching-android.apk

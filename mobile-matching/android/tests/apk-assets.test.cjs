@@ -28,7 +28,7 @@ test('the signed matching APK contains exact forward-slash asset names readable 
   assert.ok(info.versionCode >= 10700, 'matching edition has its own higher version code');
   assert.equal(info.signerSha256, 'ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0', 'retain the installed publisher signature');
   assert.equal(info.file, '根本就没有这样的象棋-安卓及鸿蒙4.2.apk');
-  assert.equal(info.versionName, '1.7.6');
+  assert.equal(info.versionName, '1.7.7');
   assert.deepEqual(fs.readdirSync(path.join(ROOT, 'release')).filter(name => name.endsWith('.apk')), [info.file], 'one fixed-name APK only');
 });
 test('actual APK ZIP asset streams preserve local play, show the plain name and open online play without focusing an input', { timeout: 30000 }, async () => {

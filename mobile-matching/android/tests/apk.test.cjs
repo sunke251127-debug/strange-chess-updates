@@ -23,10 +23,10 @@ test('signed lightweight matching APK has the original publisher identity, no na
   const hash = crypto.createHash('sha256').update(fs.readFileSync(apk)).digest('hex');
   assert.equal(hash, info.sha256); assert.equal(fs.statSync(apk).size, info.bytes);
   assert.ok(info.bytes < 64 * 1024 * 1024, 'APK must contain the offline model within 64MiB: ' + info.bytes);
-  assert.equal(info.offlineModel.simulations, 1024);
+  assert.equal(info.offlineModel.simulations, 256);
   assert.equal(info.edition, 'matching'); assert.equal(info.packageId, 'cn.strangechess.mobile.matching');
   assert.equal(info.nativeLibraries, false); assert.equal(info.webviewOnly, true);
-  assert.equal(info.versionName, '1.7.6'); assert.equal(info.versionCode, 10706);
+  assert.equal(info.versionName, '1.7.7'); assert.equal(info.versionCode, 10707);
   assert.notEqual(info.packageId, 'cn.strangechess.mobile', 'matching edition must not share the original update identity');
   assert.equal(info.signerSha256, 'ce9a58357f5126eb3d7856387a07f8b89c89309930138a48e78a46914f50fee0');
   const signature = run(java('java'), ['-jar', path.join(config.buildTools, 'lib/apksigner.jar'), 'verify', '--min-sdk-version', '23', '--verbose', '--print-certs', apk]);
@@ -34,7 +34,7 @@ test('signed lightweight matching APK has the original publisher identity, no na
   assert.match(signature, /Verified using v3 scheme.*true/); assert.ok(signature.includes(info.signerSha256));
   const manifest = run(path.join(config.buildTools, 'aapt2.exe'), ['dump', 'badging', apk]);
   assert.match(manifest, /package: name='cn.strangechess.mobile.matching'/);
-  assert.match(manifest, /versionCode='10706'/); assert.match(manifest, /versionName='1\.7\.6'/);
+  assert.match(manifest, /versionCode='10707'/); assert.match(manifest, /versionName='1\.7\.7'/);
   assert.match(manifest, /application-label:'这样的象棋'/);
   assert.match(manifest, /minSdkVersion:'26'/); assert.match(manifest, /targetSdkVersion:'35'/);
   assert.match(manifest, /launchable-activity: name='cn.strangechess.mobile.MainActivity'/);
@@ -104,7 +104,7 @@ test('the signed APK entry boots offline, preserves saves, starts new games and 
     await context.addInitScript(backend => {
       let savedServer = backend;
       window.AndroidShell = {
-        getVersion: () => '1.7.6', getServer: () => savedServer, setServer: s => { savedServer = s; },
+        getVersion: () => '1.7.7', getServer: () => savedServer, setServer: s => { savedServer = s; },
         getUpdateState: () => JSON.stringify({ status: 'current', message: '当前安装包已就绪' }), checkUpdate() {}, installUpdate() {}, toggleFullscreen: () => window.recordFullscreen()
       };
     }, server.url);

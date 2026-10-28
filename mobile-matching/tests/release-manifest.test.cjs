@@ -28,6 +28,6 @@ test('the reusable GitHub release manifest points at the exact signed lightweigh
   assert.equal(manifest.url, 'https://github.com/sunke251127-debug/strange-chess-updates/releases/download/mobile-v' + info.versionName + '/strange-chess-matching-android.apk');
   assert.equal(info.nativeLibraries, false);
   assert.ok(apk.length < 64 * 1024 * 1024);
-  assert.equal(info.offlineModel.simulations, 1024);
+  assert.equal(info.offlineModel.simulations, 256);
   assert.equal(fs.readFileSync(path.join(ROOT, 'release/SHA256SUMS.txt'), 'utf8').trim(), hash + '  strange-chess-matching-android.apk');
 });
